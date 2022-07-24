@@ -162,6 +162,7 @@ const Task = () => {
         setTitle(title);
         setSummary(summary);
         setDescription(description);
+        setAddStatus('');
         setPriority(priority);
         setDeadline(deadline);
         setAssignee(assignee);

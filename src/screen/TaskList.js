@@ -148,6 +148,7 @@ const TaskList = () => {
         setSummary('');
         setDescription('');
         setPriority('');
+        setDeadline('');
         onLoadingClose();
         getAllTasks();
         onClose();

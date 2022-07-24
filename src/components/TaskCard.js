@@ -155,14 +155,17 @@ const TaskCard = ({ id, task, getAllTasks }) => {
       taskAlertEmpty();
     } else {
       try {
-        let taskUpdate = await fetch(`https://kanbanapibegawo.herokuapp.com/tasks`, {
-          method: 'PUT',
-          headers: {
-            // Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(taskData),
-        });
+        let taskUpdate = await fetch(
+          `https://kanbanapibegawo.herokuapp.com/tasks`,
+          {
+            method: 'PUT',
+            headers: {
+              // Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(taskData),
+          }
+        );
         taskUpdate = await taskUpdate.json();
         console.log(taskData);
         taskAlertSuccess();
@@ -188,6 +191,7 @@ const TaskCard = ({ id, task, getAllTasks }) => {
     setTitle(task.title);
     setSummary(task.summary);
     setDescription(task.description);
+    setAddStatus('');
     setPriority(task.priority);
     setDeadline(task.deadline);
     setAssignee(task.assigneeId);
