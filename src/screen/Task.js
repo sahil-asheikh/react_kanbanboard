@@ -90,8 +90,8 @@ const Task = () => {
     onLoadingOpen();
     onDeleteClose();
     try {
-      let taskSoftDeleted = await fetch(
-        `https://kanbanapibegawo.herokuapp.com/softDelete/${id}/`,
+      let taskSoftDeleted = await fetch(`https://kanbanapibegawo.herokuapp.com/softDelete/${id}/`,
+      // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${id}/`,
         {
           method: 'DELETE',
           headers: {
@@ -123,7 +123,7 @@ const Task = () => {
       status: addStatus,
       deadline: deadline,
       assigneeId: 'Sahil',
-      assigneeById: 'Sahil',
+      assigneeById: localStorage.getItem('userId'),
     };
     if (
       title === '' ||
@@ -150,6 +150,7 @@ const Task = () => {
     } else {
       try {
         let taskUpdate = await fetch(`https://kanbanapibegawo.herokuapp.com/tasks`, {
+        // let taskUpdate = await fetch(`http://localhost:9000/tasks`, {
           method: 'PUT',
           headers: {
             // Accept: 'application/json',
@@ -180,6 +181,7 @@ const Task = () => {
   const fetchTask = async () => {
     onLoadingOpen();
     let taskById = await fetch(`https://kanbanapibegawo.herokuapp.com/tasks/${id}`);
+    // let taskById = await fetch(`http://localhost:9000/tasks/${id}`);
     taskById = await taskById.json();
     setTask(taskById);
 
@@ -194,7 +196,15 @@ const Task = () => {
   };
 
   useEffect(() => {
-    fetchTask();
+    if (
+      localStorage.getItem('userId') === '' ||
+      localStorage.getItem('userId') === null
+    ) {
+      console.log('Please login to continue');
+      navigate('/Login');
+    } else {
+      fetchTask();
+    }
   }, []);
 
   return (

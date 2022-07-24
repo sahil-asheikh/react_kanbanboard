@@ -25,6 +25,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import StatusCard from '../components/StatusCard';
+import { useNavigate } from 'react-router-dom';
 
 const TaskList = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -49,6 +50,7 @@ const TaskList = () => {
   const [assignees] = React.useState(['Sahil', 'Kshitij', 'Vaishali']);
   let checkLoad = false;
   const toast = useToast();
+  const navigate = useNavigate();
 
   const getAllTasks = async () => {
     onLoadingOpen();
@@ -57,7 +59,8 @@ const TaskList = () => {
     setTaskOnProgress([]);
     setTaskCompleted([]);
     try {
-      let allTask = await fetch('https://kanbanapibegawo.herokuapp.com/tasks');
+      let allTask = await fetch(`https://kanbanapibegawo.herokuapp.com/tasksByUserId/${localStorage.getItem('userId')}`);
+      // let allTask = await fetch(`http://localhost:9000/tasksByUserId/${localStorage.getItem('userId')}`);
       allTask = await allTask.json();
       setAllTasks(allTask);
       if (!checkLoad) {
@@ -111,7 +114,7 @@ const TaskList = () => {
       status: 'Not Started',
       deadline: deadline,
       assigneeId: 'Sahil',
-      assigneeById: 'Sahil',
+      assigneeById: localStorage.getItem('userId'),
     };
     if (
       title === '' ||
@@ -134,14 +137,17 @@ const TaskList = () => {
       taskAlertEmpty();
     } else {
       try {
-        let taskAdded = await fetch('https://kanbanapibegawo.herokuapp.com/tasks', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(taskData),
-        });
+        let taskAdded = await fetch('https://kanbanapibegawo.herokuapp.com/tasks',
+        // let taskAdded = await fetch('http://localhost:9000/tasks',
+          {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(taskData),
+          }
+        );
         taskAdded = await taskAdded.json();
         taskAlertSuccess();
         setTitle('');
@@ -159,8 +165,21 @@ const TaskList = () => {
     }
   };
 
+  const logout = () => {
+    localStorage.clear();
+    navigate('/Login');
+  };
+
   useEffect(() => {
-    getAllTasks();
+    if (
+      localStorage.getItem('userId') === '' ||
+      localStorage.getItem('userId') === null
+    ) {
+      console.log('Please login to continue');
+      navigate('/Login');
+    } else {
+      getAllTasks();
+    }
   }, []);
 
   return (
@@ -187,6 +206,16 @@ const TaskList = () => {
           onClick={onOpen}
         >
           Create Task
+        </Button>
+        <Button
+          fontSize={'sm'}
+          fontWeight={'normal'}
+          size={'sm'}
+          colorScheme="red"
+          mr={3}
+          onClick={logout}
+        >
+          Logout
         </Button>
 
         <Grid templateColumns="repeat(4, 2fr)" mt={10} gap={10}>

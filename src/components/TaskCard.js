@@ -32,7 +32,7 @@ import {
   EditIcon,
 } from '@chakra-ui/icons';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const TaskCard = ({ id, task, getAllTasks }) => {
   const {
@@ -61,6 +61,7 @@ const TaskCard = ({ id, task, getAllTasks }) => {
   const [assignee, setAssignee] = useState('');
   const [assignees] = React.useState(['Sahil', 'Kshitij', 'Vaishali']);
   const toast = useToast();
+  const navigate = useNavigate();
 
   const taskDeletedSuccess = () =>
     toast({
@@ -95,8 +96,8 @@ const TaskCard = ({ id, task, getAllTasks }) => {
     try {
       onLoadingOpen();
       onDeleteClose();
-      let taskSoftDeleted = await fetch(
-        `https://kanbanapibegawo.herokuapp.com/softDelete/${id}/`,
+      let taskSoftDeleted = await fetch(`https://kanbanapibegawo.herokuapp.com/softDelete/${id}/`,
+      // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${id}/`,
         {
           method: 'DELETE',
           headers: {
@@ -128,7 +129,7 @@ const TaskCard = ({ id, task, getAllTasks }) => {
       status: addStatus,
       deadline: deadline,
       assigneeId: 'Sahil',
-      assigneeById: 'Sahil',
+      assigneeById: localStorage.getItem('userId'),
     };
     console.log(taskData);
     if (
@@ -155,8 +156,8 @@ const TaskCard = ({ id, task, getAllTasks }) => {
       taskAlertEmpty();
     } else {
       try {
-        let taskUpdate = await fetch(
-          `https://kanbanapibegawo.herokuapp.com/tasks`,
+        let taskUpdate = await fetch(`https://kanbanapibegawo.herokuapp.com/tasks`,
+        // let taskUpdate = await fetch(`http://localhost:9000/tasks`,
           {
             method: 'PUT',
             headers: {
@@ -200,7 +201,15 @@ const TaskCard = ({ id, task, getAllTasks }) => {
   };
 
   useEffect(() => {
-    storeData();
+    if (
+      localStorage.getItem('userId') === '' ||
+      localStorage.getItem('userId') === null
+    ) {
+      console.log('Please login to continue');
+      navigate('/Login');
+    } else {
+      storeData();
+    }
   }, []);
 
   return (
