@@ -59,7 +59,11 @@ const TaskList = () => {
     setTaskOnProgress([]);
     setTaskCompleted([]);
     try {
-      let allTask = await fetch(`https://kanbanapibegawo.herokuapp.com/tasksByUserId/${localStorage.getItem('userId')}`);
+      let allTask = await fetch(
+        `https://kanbanapibegawo.herokuapp.com/tasksByUserId/${localStorage.getItem(
+          'userId'
+        )}`
+      );
       // let allTask = await fetch(`http://localhost:9000/tasksByUserId/${localStorage.getItem('userId')}`);
       allTask = await allTask.json();
       setAllTasks(allTask);
@@ -137,8 +141,9 @@ const TaskList = () => {
       taskAlertEmpty();
     } else {
       try {
-        let taskAdded = await fetch('https://kanbanapibegawo.herokuapp.com/tasks',
-        // let taskAdded = await fetch('http://localhost:9000/tasks',
+        let taskAdded = await fetch(
+          'https://kanbanapibegawo.herokuapp.com/tasks',
+          // let taskAdded = await fetch('http://localhost:9000/tasks',
           {
             method: 'POST',
             headers: {
@@ -211,7 +216,9 @@ const TaskList = () => {
           fontSize={'sm'}
           fontWeight={'normal'}
           size={'sm'}
-          colorScheme="red"
+          // colorScheme="red"
+          bg={'red.100'}
+          color={'red'}
           mr={3}
           onClick={logout}
         >
