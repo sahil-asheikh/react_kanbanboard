@@ -122,14 +122,14 @@ const TaskCard = ({ id, task, getAllTasks }) => {
     onLoadingOpen();
     let taskData = {
       id: id,
-      title: title,
-      summary: summary,
-      description: description,
-      priority: priority,
-      status: addStatus,
-      deadline: deadline,
+      title: title.toString().trim(),
+      summary: summary.toString().trim(),
+      description: description.toString().trim(),
+      priority: priority.toString().trim(),
+      status: addStatus.toString().trim(),
+      deadline: deadline.toString().trim(),
       assigneeId: 'Sahil',
-      assigneeById: localStorage.getItem('userId'),
+      assigneeById: localStorage.getItem('userId').toString().trim(),
     };
     console.log(taskData);
     if (

@@ -51,6 +51,26 @@ const TaskList = () => {
   let checkLoad = false;
   const toast = useToast();
   const navigate = useNavigate();
+  const onCreateClose = () => {
+    setTitle('');
+    setSummary('');
+    setDescription('');
+    setPriority('');
+    setDeadline('');
+    onLoadingClose();
+    getAllTasks();
+    onClose();
+  };
+  const onCreateOpen = () => {
+    setTitle('');
+    setSummary('');
+    setDescription('');
+    setPriority('');
+    setDeadline('');
+    onLoadingClose();
+    getAllTasks();
+    onOpen();
+  };
 
   const getAllTasks = async () => {
     onLoadingOpen();
@@ -111,14 +131,14 @@ const TaskList = () => {
   const addTask = async () => {
     onLoadingOpen();
     let taskData = {
-      title: title,
-      summary: summary,
-      description: description,
-      priority: priority,
+      title: title.toString().trim(),
+      summary: summary.toString().trim(),
+      description: description.toString().trim(),
+      priority: priority.toString().trim(),
       status: 'Not Started',
-      deadline: deadline,
+      deadline: deadline.toString().trim(),
       assigneeId: 'Sahil',
-      assigneeById: localStorage.getItem('userId'),
+      assigneeById: localStorage.getItem('userId').toString().trim(),
     };
     if (
       title === '' ||
@@ -141,18 +161,16 @@ const TaskList = () => {
       taskAlertEmpty();
     } else {
       try {
-        let taskAdded = await fetch(
-          'https://kanbanapibegawo.herokuapp.com/tasks',
-          // let taskAdded = await fetch('http://localhost:9000/tasks',
-          {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(taskData),
-          }
-        );
+        let taskAdded = await fetch('https://kanbanapibegawo.herokuapp.com/tasks',
+        // let taskAdded = await fetch('http://localhost:9000/tasks',
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(taskData),
+        });
         taskAdded = await taskAdded.json();
         taskAlertSuccess();
         setTitle('');
@@ -208,7 +226,7 @@ const TaskList = () => {
           size={'sm'}
           colorScheme="facebook"
           mr={3}
-          onClick={onOpen}
+          onClick={onCreateOpen}
         >
           Create Task
         </Button>
@@ -268,7 +286,7 @@ const TaskList = () => {
         <ModalOverlay />
         <ModalContent>
           {/* <ModalHeader>Add your new Task</ModalHeader> */}
-          <ModalCloseButton />
+          <ModalCloseButton onClick={onCreateClose} />
           <ModalBody>
             <Heading fontSize={'26px'} fontWeight={'400'} mt={4}>
               Add Your Task
@@ -448,7 +466,7 @@ const TaskList = () => {
               color={'black'}
               mr={3}
               fontWeight={'normal'}
-              onClick={onClose}
+              onClick={onCreateClose}
             >
               Close
             </Button>

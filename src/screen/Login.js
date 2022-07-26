@@ -62,7 +62,20 @@ const Login = () => {
       duration: 2000,
       isClosable: true,
     });
-
+  const alertPasswordLength = () =>
+    toast({
+      title: 'Password length must be more than 6 characters',
+      status: 'warning',
+      duration: 2000,
+      isClosable: true,
+    });
+  const alertInvalidUsername = () =>
+    toast({
+      title: 'Invalid Username',
+      status: 'warning',
+      duration: 2000,
+      isClosable: true,
+    });
   const loginIncorrectUsername = () =>
     toast({
       title: 'User not found',
@@ -70,7 +83,6 @@ const Login = () => {
       duration: 2000,
       isClosable: true,
     });
-
   const loginIncorrectPassword = () =>
     toast({
       title: 'Incorrect Password',
@@ -89,18 +101,21 @@ const Login = () => {
     ) {
       onLoadingClose();
       loginAlertEmpty();
+    } else if (!username.match('@')) {
+      onLoadingClose();
+      alertInvalidUsername();
+    } else if (password.length < 6) {
+      onLoadingClose();
+      alertPasswordLength();
     } else {
       try {
-        let taskById = await fetch(
-          `https://kanbanapibegawo.herokuapp.com/login?username=${username}&password=${password}`
-        );
-        // let taskById = await fetch(`http://localhost:7000/login?username=${username}&password=${password}`);
+        let taskById = await fetch(`https://kanbanapibegawo.herokuapp.com/login?username=${username.toString().trim()}&password=${password.toString().trim()}`);
+        // let taskById = await fetch(`http://localhost:9000/login?username=${username.toString().trim()}&password=${password.toString().trim()}`);
         taskById = await taskById.json();
 
         if (taskById.outputCode === 'Loged in succesfully') {
           loginAlertSuccess();
           localStorage.setItem('userId', taskById.userId);
-          console.log(localStorage.getItem('userId'));
           navigate('/');
         } else if (taskById.outputCode === 'User not found') {
           loginIncorrectUsername();

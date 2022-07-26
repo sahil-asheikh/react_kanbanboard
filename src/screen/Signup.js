@@ -56,6 +56,27 @@ const Signup = () => {
       duration: 2000,
       isClosable: true,
     });
+  const alertPasswordLength = () =>
+    toast({
+      title: 'Password length must be more than 6 characters',
+      status: 'warning',
+      duration: 2000,
+      isClosable: true,
+    });
+  const alertInvalidUsername = () =>
+    toast({
+      title: 'Invalid Username',
+      status: 'warning',
+      duration: 2000,
+      isClosable: true,
+    });
+  const alertUsernameAvailable = () =>
+    toast({
+      title: 'Username is already available',
+      status: 'error',
+      duration: 2000,
+      isClosable: true,
+    });
   const signupAlertEmpty = () =>
     toast({
       title: 'Input fields are empty!',
@@ -81,11 +102,16 @@ const Signup = () => {
     ) {
       onLoadingClose();
       signupAlertEmpty();
+    } else if (password.length < 6) {
+      onLoadingClose();
+      alertPasswordLength();
+    } else if (!username.match('@')) {
+      onLoadingClose();
+      alertInvalidUsername();
     } else {
       try {
-        let userAdded = await fetch(
-          'https://kanbanapibegawo.herokuapp.com/register',
-          // let userAdded = await fetch('http://localhost:7000/register',
+        let userAdded = await fetch('https://kanbanapibegawo.herokuapp.com/register',
+          // let userAdded = await fetch('http://localhost:9000/register',
           {
             method: 'POST',
             headers: {
@@ -96,9 +122,15 @@ const Signup = () => {
           }
         );
         userAdded = await userAdded.json();
-        onLoadingClose();
-        signupAlertSuccess();
-        navigate('/Login');
+
+        if (userAdded.outputCode === 'User already Available') {
+          onLoadingClose();
+          alertUsernameAvailable();
+        } else {
+          onLoadingClose();
+          signupAlertSuccess();
+          navigate('/Login');
+        }
       } catch (error) {
         onLoadingClose();
         console.log(`${error}`);
@@ -112,7 +144,7 @@ const Signup = () => {
       localStorage.getItem('userId') === '' ||
       localStorage.getItem('userId') === null
     ) {
-      console.log('Please login to continue');
+      console.log('Please register to continue');
     } else {
       navigate('/');
     }
@@ -221,7 +253,7 @@ const Signup = () => {
                   Signup
                 </Button>
                 <Box>
-                  New to us?{' '}
+                  Already had an account?{' '}
                   <Link fontWeight={'semibold'} color="blue.600" href="/Login">
                     Login
                   </Link>
