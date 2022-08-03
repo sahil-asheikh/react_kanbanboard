@@ -2,6 +2,10 @@
   "name": "kanbanboard-react",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "16.16.0",
+    "npm": "8.15.1"
+  },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.4",
     "@chakra-ui/react": "^2.2.4",
@@ -39,9 +43,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "engines": {
-    "node": "16.16.0",
-    "npm": "8.15.1"
   }
 }
