@@ -28,7 +28,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const Task = () => {
   const navigate = useNavigate();
-  const { id } = useParams({});
+  const { taskId } = useParams({});
   const [task, setTask] = useState([]);
   const {
     isOpen: isUpdateOpen,
@@ -47,6 +47,7 @@ const Task = () => {
   } = useDisclosure();
   const [status] = useState(['Not Started', 'On Progress', 'Completed']);
   const [addStatus, setAddStatus] = useState('');
+  const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [description, setDescription] = useState('');
@@ -57,41 +58,20 @@ const Task = () => {
   const [assignees] = React.useState(['Sahil', 'Kshitij', 'Vaishali']);
   const toast = useToast();
 
-  const taskDeletedSuccess = () =>
-    toast({
-      title: 'Task Deleted Successfully',
-      status: 'error',
-      duration: 2000,
-      isClosable: true,
-    });
-  const taskAlertSuccess = () =>
-    toast({
-      title: 'Task Updated Successfully',
-      status: 'success',
-      duration: 2000,
-      isClosable: true,
-    });
-  const taskAlertError = () =>
-    toast({
-      title: 'Operation Failed!',
-      status: 'error',
-      duration: 2000,
-      isClosable: true,
-    });
-  const taskAlertEmpty = () =>
-    toast({
-      title: 'Input fields are empty!',
-      status: 'warning',
-      duration: 2000,
-      isClosable: true,
-    });
+  const alertToast = (message, alertStatus) =>
+  toast({
+    title: message,
+    status: alertStatus,
+    duration: 1500,
+    isClosable: true,
+  });
 
   const softDeleteTask = async () => {
     onLoadingOpen();
     onDeleteClose();
     try {
-      let taskSoftDeleted = await fetch(`https://kanbanapibegawo.herokuapp.com/softDelete/${id}/`,
-      // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${id}/`,
+      let taskSoftDeleted = await fetch(`https://kanbanapibegawo.herokuapp.com/softDelete/${taskId}/`,
+      // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
         {
           method: 'DELETE',
           headers: {
@@ -102,13 +82,12 @@ const Task = () => {
         }
       );
       taskSoftDeleted = await taskSoftDeleted.json();
-      console.log(taskSoftDeleted);
-      taskDeletedSuccess();
+      alertToast("Task Deleted Successfully", "error");
       onLoadingClose();
       navigate('/');
     } catch (error) {
       console.log(`${error}`);
-      taskAlertError();
+      alertToast("Operation Failed!", "error");
     }
   };
 
@@ -116,6 +95,7 @@ const Task = () => {
     onLoadingOpen();
     let taskData = {
       id: id,
+      taskId: taskId,
       title: title.toString().trim(),
       summary: summary.toString().trim(),
       description: description.toString().trim(),
@@ -124,6 +104,7 @@ const Task = () => {
       deadline: deadline.toString().trim(),
       assigneeId: 'Sahil',
       assigneeById: localStorage.getItem('userId').toString().trim(),
+      projectId: 'sahilmustchange',
     };
     if (
       title === '' ||
@@ -146,9 +127,10 @@ const Task = () => {
       addStatus.length === 0
     ) {
       onLoadingClose();
-      taskAlertEmpty();
+      alertToast("Input fields are empty!", "warning");
     } else {
       try {
+        console.log(taskData);
         let taskUpdate = await fetch(`https://kanbanapibegawo.herokuapp.com/tasks`, {
         // let taskUpdate = await fetch(`http://localhost:9000/tasks`, {
           method: 'PUT',
@@ -159,7 +141,7 @@ const Task = () => {
           body: JSON.stringify(taskData),
         });
         taskUpdate = await taskUpdate.json();
-        taskAlertSuccess();
+        alertToast("Task Updated Successfully", "success");
         setTitle(title);
         setSummary(summary);
         setDescription(description);
@@ -173,18 +155,19 @@ const Task = () => {
         fetchTask();
       } catch (error) {
         console.log(`${error}`);
-        taskAlertError();
+        alertToast("Operation Failed!", "error");
       }
     }
   };
 
   const fetchTask = async () => {
     onLoadingOpen();
-    let taskById = await fetch(`https://kanbanapibegawo.herokuapp.com/tasks/${id}`);
-    // let taskById = await fetch(`http://localhost:9000/tasks/${id}`);
+    let taskById = await fetch(`https://kanbanapibegawo.herokuapp.com/tasks/${taskId}`);
+    // let taskById = await fetch(`http://localhost:9000/tasks/${taskId}`);
     taskById = await taskById.json();
+    console.log(taskById);
     setTask(taskById);
-
+    setId(taskById.id);
     setTitle(taskById.title);
     setSummary(taskById.summary);
     setDescription(taskById.description);
@@ -252,9 +235,6 @@ const Task = () => {
               {task.description}
             </Text>
           </GridItem>
-          {/* <Center maxWidth={'20px'}>
-            <Divider mx={1} orientation="vertical" />
-          </Center> */}
           <GridItem p={4} bg={'#EEEEEE'} borderRadius={'5px'}>
             <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
               Priority: &nbsp; {task.priority}
@@ -262,12 +242,12 @@ const Task = () => {
             <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
               Status: &nbsp; {task.status}
             </Text>
-            {/* <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
+            <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
               Assigned By: &nbsp; {task.assignedById}
             </Text>
             <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
               Assignee: &nbsp; {task.assigneeId}
-            </Text> */}
+            </Text>
             <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
               Created On: &nbsp; {task.createdAt}
             </Text>

@@ -46,8 +46,6 @@ const TaskList = () => {
   const [deadline, setDeadline] = useState('');
   const [priority, setPriority] = useState('');
   const [priorities] = React.useState(['P1', 'P2', 'P3', 'P4']);
-  const [assignee, setAssignee] = useState('');
-  const [assignees] = React.useState(['Sahil', 'Kshitij', 'Vaishali']);
   let checkLoad = false;
   const toast = useToast();
   const navigate = useNavigate();
@@ -79,11 +77,7 @@ const TaskList = () => {
     setTaskOnProgress([]);
     setTaskCompleted([]);
     try {
-      let allTask = await fetch(
-        `https://kanbanapibegawo.herokuapp.com/tasksByUserId/${localStorage.getItem(
-          'userId'
-        )}`
-      );
+      let allTask = await fetch(`https://kanbanapibegawo.herokuapp.com/tasksByUserId/${localStorage.getItem('userId')}`);
       // let allTask = await fetch(`http://localhost:9000/tasksByUserId/${localStorage.getItem('userId')}`);
       allTask = await allTask.json();
       setAllTasks(allTask);
@@ -101,30 +95,16 @@ const TaskList = () => {
       checkLoad = true;
     } catch (error) {
       console.log(`${error}`);
-      taskAlertError();
+      alertToast('Operation Failed!', 'error');
     }
     onLoadingClose();
   };
 
-  const taskAlertSuccess = () =>
+  const alertToast = (message, alertStatus) =>
     toast({
-      title: 'Task Added Successfully',
-      status: 'success',
-      duration: 2000,
-      isClosable: true,
-    });
-  const taskAlertError = () =>
-    toast({
-      title: 'Operation Failed!',
-      status: 'error',
-      duration: 2000,
-      isClosable: true,
-    });
-  const taskAlertEmpty = () =>
-    toast({
-      title: 'Input fields are empty!',
-      status: 'warning',
-      duration: 2000,
+      title: message,
+      status: alertStatus,
+      duration: 1500,
       isClosable: true,
     });
 
@@ -139,6 +119,7 @@ const TaskList = () => {
       deadline: deadline.toString().trim(),
       assigneeId: 'Sahil',
       assigneeById: localStorage.getItem('userId').toString().trim(),
+      projectId: 'sahilmustchange',
     };
     if (
       title === '' ||
@@ -158,7 +139,7 @@ const TaskList = () => {
       deadline.length === 0
     ) {
       onLoadingClose();
-      taskAlertEmpty();
+      alertToast('Please fill the empty inputs', 'warning');
     } else {
       try {
         let taskAdded = await fetch('https://kanbanapibegawo.herokuapp.com/tasks',
@@ -172,7 +153,7 @@ const TaskList = () => {
           body: JSON.stringify(taskData),
         });
         taskAdded = await taskAdded.json();
-        taskAlertSuccess();
+        alertToast('Task Added Successfully', 'success');
         setTitle('');
         setSummary('');
         setDescription('');
@@ -183,7 +164,7 @@ const TaskList = () => {
         onClose();
       } catch (error) {
         console.log(`${error}`);
-        taskAlertError();
+        alertToast('Operation Failed!', 'error');
       }
     }
   };
@@ -234,7 +215,6 @@ const TaskList = () => {
           fontSize={'sm'}
           fontWeight={'normal'}
           size={'sm'}
-          // colorScheme="red"
           bg={'red.100'}
           color={'red'}
           mr={3}
@@ -244,34 +224,52 @@ const TaskList = () => {
         </Button>
 
         <Grid templateColumns="repeat(4, 2fr)" mt={10} gap={10}>
-          <GridItem w="100%" borderRadius={'5px'} bg={'#EEEEEE'}>
+          <GridItem
+            w="100%"
+            borderRadius={'5px'}
+            // bg={'#EEEEEE'}
+          >
             <Text size="20px" px={2} py={1} fontWeight={'medium'} bg={'white'}>
               {status[0]} {'(' + tasksNotStarted.length + ')'}
             </Text>
             <Box bg={'#EEEEEE'}>
               <StatusCard
+                taskStat={status[0]}
                 taskList={tasksNotStarted}
                 getAllTasks={getAllTasks}
               />
             </Box>
           </GridItem>
-          <GridItem w="100%" borderRadius={'5px'} bg={'#EEEEEE'}>
+          <GridItem
+            w="100%"
+            borderRadius={'5px'}
+            //  bg={'#EEEEEE'}
+          >
             <Text size="20px" px={2} py={1} fontWeight={'medium'} bg={'white'}>
               {status[1]} {'(' + tasksOnProgress.length + ')'}
             </Text>
             <Box bg={'#EEEEEE'}>
               <StatusCard
+                taskStat={status[1]}
                 taskList={tasksOnProgress}
                 getAllTasks={getAllTasks}
               />
             </Box>
           </GridItem>
-          <GridItem w="100%" borderRadius={'5px'} bg={'#EEEEEE'}>
+          <GridItem
+            w="100%"
+            borderRadius={'5px'}
+            //  bg={'#EEEEEE'}
+          >
             <Text size="20px" px={2} py={1} fontWeight={'medium'} bg={'white'}>
               {status[2]} {'(' + tasksCompleted.length + ')'}
             </Text>
             <Box bg={'#EEEEEE'}>
-              <StatusCard taskList={tasksCompleted} getAllTasks={getAllTasks} />
+              <StatusCard
+                taskStat={status[2]}
+                taskList={tasksCompleted}
+                getAllTasks={getAllTasks}
+              />
             </Box>
           </GridItem>
         </Grid>

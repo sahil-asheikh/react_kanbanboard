@@ -29,12 +29,13 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   DeleteIcon,
+  DragHandleIcon,
   EditIcon,
 } from '@chakra-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const TaskCard = ({ id, task, getAllTasks }) => {
+const TaskCard = ({ taskId, task, getAllTasks }) => {
   const {
     isOpen: isUpdateOpen,
     onOpen: onUpdateOpen,
@@ -52,6 +53,7 @@ const TaskCard = ({ id, task, getAllTasks }) => {
   } = useDisclosure();
   const [status] = useState(['Not Started', 'On Progress', 'Completed']);
   const [addStatus, setAddStatus] = useState('');
+  const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [description, setDescription] = useState('');
@@ -63,32 +65,11 @@ const TaskCard = ({ id, task, getAllTasks }) => {
   const toast = useToast();
   const navigate = useNavigate();
 
-  const taskDeletedSuccess = () =>
+  const alertToast = (message, alertStatus) =>
     toast({
-      title: 'Task Deleted Successfully',
-      status: 'error',
-      duration: 2000,
-      isClosable: true,
-    });
-  const taskAlertSuccess = () =>
-    toast({
-      title: 'Task Updated Successfully',
-      status: 'success',
-      duration: 2000,
-      isClosable: true,
-    });
-  const taskAlertError = () =>
-    toast({
-      title: 'Operation Failed!',
-      status: 'error',
-      duration: 2000,
-      isClosable: true,
-    });
-  const taskAlertEmpty = () =>
-    toast({
-      title: 'Input fields are empty!',
-      status: 'warning',
-      duration: 2000,
+      title: message,
+      status: alertStatus,
+      duration: 1500,
       isClosable: true,
     });
 
@@ -96,8 +77,8 @@ const TaskCard = ({ id, task, getAllTasks }) => {
     try {
       onLoadingOpen();
       onDeleteClose();
-      let taskSoftDeleted = await fetch(`https://kanbanapibegawo.herokuapp.com/softDelete/${id}/`,
-      // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${id}/`,
+      let taskSoftDeleted = await fetch(`https://kanbanapibegawo.herokuapp.com/softDelete/${taskId}/`,
+      // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
         {
           method: 'DELETE',
           headers: {
@@ -108,12 +89,12 @@ const TaskCard = ({ id, task, getAllTasks }) => {
         }
       );
       taskSoftDeleted = await taskSoftDeleted.json();
-      taskDeletedSuccess();
+      alertToast('Task Deleted Successfully', 'error');
       onLoadingClose();
       // onDeleteClose();
     } catch (error) {
       console.log(`${error}`);
-      taskAlertError();
+      alertToast('Operation Failed!', 'error');
     }
     getAllTasks();
   };
@@ -122,6 +103,7 @@ const TaskCard = ({ id, task, getAllTasks }) => {
     onLoadingOpen();
     let taskData = {
       id: id,
+      taskId: taskId,
       title: title.toString().trim(),
       summary: summary.toString().trim(),
       description: description.toString().trim(),
@@ -130,6 +112,7 @@ const TaskCard = ({ id, task, getAllTasks }) => {
       deadline: deadline.toString().trim(),
       assigneeId: 'Sahil',
       assigneeById: localStorage.getItem('userId').toString().trim(),
+      projectId: 'sahilmustchange',
     };
     console.log(taskData);
     if (
@@ -153,23 +136,22 @@ const TaskCard = ({ id, task, getAllTasks }) => {
       addStatus.length === 0
     ) {
       onLoadingClose();
-      taskAlertEmpty();
+      alertToast('Input fields are empty!', 'warning');
     } else {
       try {
         let taskUpdate = await fetch(`https://kanbanapibegawo.herokuapp.com/tasks`,
         // let taskUpdate = await fetch(`http://localhost:9000/tasks`,
-          {
-            method: 'PUT',
-            headers: {
-              // Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(taskData),
-          }
-        );
+        {
+          method: 'PUT',
+          headers: {
+            // Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(taskData),
+        });
         taskUpdate = await taskUpdate.json();
         console.log(taskData);
-        taskAlertSuccess();
+        alertToast('Task Updated Successfully', 'success');
         setTitle(title);
         setSummary(summary);
         setDescription(description);
@@ -181,7 +163,8 @@ const TaskCard = ({ id, task, getAllTasks }) => {
         getAllTasks();
       } catch (error) {
         console.log(`${error}`);
-        taskAlertError();
+        alertToast('Operation Failed!', 'error');
+        onLoadingClose();
       }
       onUpdateClose();
     }
@@ -189,6 +172,7 @@ const TaskCard = ({ id, task, getAllTasks }) => {
 
   const storeData = () => {
     onLoadingOpen();
+    setId(task.id);
     setTitle(task.title);
     setSummary(task.summary);
     setDescription(task.description);
@@ -225,39 +209,53 @@ const TaskCard = ({ id, task, getAllTasks }) => {
           background={'white'}
         >
           <Stack textAlign={'left'} px={3} align={'left'}>
-            <Box mt={1} textAlign={'right'}>
-              <IconButton
-                aria-label="Search database"
-                size={3}
-                onClick={onDeleteOpen}
-                icon={
-                  <DeleteIcon
-                    w={'24px'}
-                    h={'24px'}
-                    p={'5px'}
+            <Grid templateColumns={'repeat(2, 2fr)'} gap={2}>
+              <GridItem>
+                <Text mt={1} textAlign={'left'}>
+                  <DragHandleIcon
+                    cursor={'grab'}
+                    h={'18px'}
                     bg={'white'}
-                    color={'red.500'}
+                    color={'grey'}
                   />
-                }
-              />
-              &nbsp;
-              <IconButton
-                aria-label="Search database"
-                size={3}
-                onClick={onUpdateOpen}
-                icon={
-                  <EditIcon
-                    w={'24px'}
-                    h={'24px'}
-                    p={'5px'}
-                    bg={'white'}
-                    color={'blue.500'}
+                </Text>
+              </GridItem>
+              <GridItem>
+                <Box mt={1} textAlign={'right'}>
+                  <IconButton
+                    aria-label="Search database"
+                    size={3}
+                    onClick={onDeleteOpen}
+                    icon={
+                      <DeleteIcon
+                        w={'24px'}
+                        h={'24px'}
+                        p={'5px'}
+                        bg={'white'}
+                        color={'red.500'}
+                      />
+                    }
                   />
-                }
-              />
-            </Box>
+                  &nbsp;
+                  <IconButton
+                    aria-label="Search database"
+                    size={3}
+                    onClick={onUpdateOpen}
+                    icon={
+                      <EditIcon
+                        w={'24px'}
+                        h={'24px'}
+                        p={'5px'}
+                        bg={'white'}
+                        color={'blue.500'}
+                      />
+                    }
+                  />
+                </Box>
+              </GridItem>
+            </Grid>
             {/* <Divider /> */}
-            <Link to={`/Task/${id}`}>
+            <Link to={`/Task/${taskId}`}>
               <Text
                 pt={1}
                 color="#333333"
