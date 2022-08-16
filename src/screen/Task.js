@@ -22,6 +22,7 @@ import {
   Link,
   Spinner,
   Center,
+  SimpleGrid,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -59,19 +60,20 @@ const Task = () => {
   const toast = useToast();
 
   const alertToast = (message, alertStatus) =>
-  toast({
-    title: message,
-    status: alertStatus,
-    duration: 1500,
-    isClosable: true,
-  });
+    toast({
+      title: message,
+      status: alertStatus,
+      duration: 1500,
+      isClosable: true,
+    });
 
   const softDeleteTask = async () => {
     onLoadingOpen();
     onDeleteClose();
     try {
-      let taskSoftDeleted = await fetch(`https://kanbanapibegawo.herokuapp.com/softDelete/${taskId}/`,
-      // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
+      let taskSoftDeleted = await fetch(
+        `https://kanbanapibegawo.herokuapp.com/softDelete/${taskId}/`,
+        // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
         {
           method: 'DELETE',
           headers: {
@@ -82,12 +84,12 @@ const Task = () => {
         }
       );
       taskSoftDeleted = await taskSoftDeleted.json();
-      alertToast("Task Deleted Successfully", "error");
+      alertToast('Task Deleted Successfully', 'error');
       onLoadingClose();
       navigate('/');
     } catch (error) {
       console.log(`${error}`);
-      alertToast("Operation Failed!", "error");
+      alertToast('Operation Failed!', 'error');
     }
   };
 
@@ -127,21 +129,23 @@ const Task = () => {
       addStatus.length === 0
     ) {
       onLoadingClose();
-      alertToast("Input fields are empty!", "warning");
+      alertToast('Input fields are empty!', 'warning');
     } else {
       try {
-        console.log(taskData);
-        let taskUpdate = await fetch(`https://kanbanapibegawo.herokuapp.com/tasks`, {
-        // let taskUpdate = await fetch(`http://localhost:9000/tasks`, {
-          method: 'PUT',
-          headers: {
-            // Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(taskData),
-        });
+        let taskUpdate = await fetch(
+          `https://kanbanapibegawo.herokuapp.com/tasks`,
+          {
+            // let taskUpdate = await fetch(`http://localhost:9000/tasks`, {
+            method: 'PUT',
+            headers: {
+              // Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(taskData),
+          }
+        );
         taskUpdate = await taskUpdate.json();
-        alertToast("Task Updated Successfully", "success");
+        alertToast('Task Updated Successfully', 'success');
         setTitle(title);
         setSummary(summary);
         setDescription(description);
@@ -155,17 +159,18 @@ const Task = () => {
         fetchTask();
       } catch (error) {
         console.log(`${error}`);
-        alertToast("Operation Failed!", "error");
+        alertToast('Operation Failed!', 'error');
       }
     }
   };
 
   const fetchTask = async () => {
     onLoadingOpen();
-    let taskById = await fetch(`https://kanbanapibegawo.herokuapp.com/tasks/${taskId}`);
+    let taskById = await fetch(
+      `https://kanbanapibegawo.herokuapp.com/tasks/${taskId}`
+    );
     // let taskById = await fetch(`http://localhost:9000/tasks/${taskId}`);
     taskById = await taskById.json();
-    console.log(taskById);
     setTask(taskById);
     setId(taskById.id);
     setTitle(taskById.title);
@@ -192,7 +197,7 @@ const Task = () => {
 
   return (
     <div>
-      <Box mx={100} my={10}>
+      <Box mx={{ base: 1, md: 100, lg: 100, xl: 100 }} my={10}>
         <Heading fontWeight={'400'} color="#333333" fontSize={'36px'}>
           {task.title}
         </Heading>
@@ -229,33 +234,27 @@ const Task = () => {
           </Button>
         </Box>
 
-        <Grid templateColumns="repeat(2, 1fr)" mt={10} gap={10}>
-          <GridItem width={'750px'}>
-            <Text fontWeight={'400'} color={'#333333'} fontSize={'16px'}>
-              {task.description}
-            </Text>
-          </GridItem>
-          <GridItem p={4} bg={'#EEEEEE'} borderRadius={'5px'}>
-            <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
-              Priority: &nbsp; {task.priority}
-            </Text>
-            <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
-              Status: &nbsp; {task.status}
-            </Text>
-            <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
-              Assigned By: &nbsp; {task.assignedById}
-            </Text>
-            <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
-              Assignee: &nbsp; {task.assigneeId}
-            </Text>
-            <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
-              Created On: &nbsp; {task.createdAt}
-            </Text>
-            <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
-              Deadline: &nbsp; {task.deadline}
-            </Text>
-          </GridItem>
-        </Grid>
+        <Text
+          mt={10}
+          mb={3}
+          fontWeight={'400'}
+          color={'#333333'}
+          fontSize={'16px'}
+        >
+          {task.description}
+        </Text>
+        <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
+          Priority: &nbsp; {task.priority}
+        </Text>
+        <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
+          Status: &nbsp; {task.status}
+        </Text>
+        <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
+          Created On: &nbsp; {task.createdAt}
+        </Text>
+        <Text fontWeight={'medium'} color={'#333333'} fontSize={'16px'}>
+          Deadline: &nbsp; {task.deadline}
+        </Text>
       </Box>
 
       <Modal
@@ -272,7 +271,11 @@ const Task = () => {
               Update Your Task
             </Heading>
             <Divider mt={3} />
-            <Grid templateColumns="repeat(2, 1fr)" mt={1} gap={10}>
+            <SimpleGrid
+              columns={{ base: 1, md: 2, lg: 2, xl: 2 }}
+              mt={1}
+              gap={10}
+            >
               <GridItem>
                 <FormControl isRequired>
                   <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
@@ -369,31 +372,6 @@ const Task = () => {
                     ))}
                   </Select>
                 </FormControl>
-                {/* <FormControl>
-                  <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
-                    Assigne To
-                  </FormLabel>
-                  <Select
-                    opacity={'80%'}
-                    fontSize={'12px'}
-                    size={'sm'}
-                    borderRadius={'5px'}
-                    value={assignee}
-                    onChange={e => setAssignee(e.target.value)}
-                  >
-                    {assignees.map(assigneeItem => (
-                      <option
-                        color={'black'}
-                        fontSize={'12px'}
-                        bg={'white'}
-                        key={assigneeItem}
-                        value={assigneeItem}
-                      >
-                        {assigneeItem}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl> */}
                 <FormControl isRequired>
                   <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
                     Deadline
@@ -416,7 +394,7 @@ const Task = () => {
                   </FormLabel>
                 </FormControl>
               </GridItem>
-            </Grid>
+            </SimpleGrid>
           </ModalBody>
 
           <ModalFooter textAlign={'right'}>

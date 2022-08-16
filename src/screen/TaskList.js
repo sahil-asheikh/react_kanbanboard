@@ -6,7 +6,6 @@ import {
   Divider,
   FormControl,
   FormLabel,
-  Grid,
   GridItem,
   Heading,
   Input,
@@ -15,9 +14,9 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalFooter,
-  ModalHeader,
   ModalOverlay,
   Select,
+  SimpleGrid,
   Spinner,
   Text,
   Textarea,
@@ -34,7 +33,6 @@ const TaskList = () => {
     onOpen: onLoadingOpen,
     onClose: onLoadingClose,
   } = useDisclosure();
-  const [tasks, setAllTasks] = useState([]);
   const [tasksNotStarted, setTaskNotStarted] = useState([]);
   const [tasksOnProgress, setTaskOnProgress] = useState([]);
   const [tasksCompleted, setTaskCompleted] = useState([]);
@@ -72,22 +70,24 @@ const TaskList = () => {
 
   const getAllTasks = async () => {
     onLoadingOpen();
-    setAllTasks([]);
     setTaskNotStarted([]);
     setTaskOnProgress([]);
     setTaskCompleted([]);
     try {
-      let allTask = await fetch(`https://kanbanapibegawo.herokuapp.com/tasksByUserId/${localStorage.getItem('userId')}`);
+      let allTask = await fetch(
+        `https://kanbanapibegawo.herokuapp.com/tasksByUserId/${localStorage.getItem(
+          'userId'
+        )}`
+      );
       // let allTask = await fetch(`http://localhost:9000/tasksByUserId/${localStorage.getItem('userId')}`);
       allTask = await allTask.json();
-      setAllTasks(allTask);
       if (!checkLoad) {
         for (let i in allTask) {
-          if (allTask[i].status == 'Not Started') {
+          if (allTask[i].status === 'Not Started') {
             setTaskNotStarted(prevTask => [...prevTask, allTask[i]]);
-          } else if (allTask[i].status == 'On Progress') {
+          } else if (allTask[i].status === 'On Progress') {
             setTaskOnProgress(prevTask => [...prevTask, allTask[i]]);
-          } else if (allTask[i].status == 'Completed') {
+          } else if (allTask[i].status === 'Completed') {
             setTaskCompleted(prevTask => [...prevTask, allTask[i]]);
           }
         }
@@ -142,16 +142,18 @@ const TaskList = () => {
       alertToast('Please fill the empty inputs', 'warning');
     } else {
       try {
-        let taskAdded = await fetch('https://kanbanapibegawo.herokuapp.com/tasks',
-        // let taskAdded = await fetch('http://localhost:9000/tasks',
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(taskData),
-        });
+        let taskAdded = await fetch(
+          'https://kanbanapibegawo.herokuapp.com/tasks',
+          // let taskAdded = await fetch('http://localhost:9000/tasks',
+          {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(taskData),
+          }
+        );
         taskAdded = await taskAdded.json();
         alertToast('Task Added Successfully', 'success');
         setTitle('');
@@ -188,7 +190,7 @@ const TaskList = () => {
 
   return (
     <div>
-      <Box mx={100} my={10}>
+      <Box mx={{ base: 1, md: 100, lg: 100, xl: 100 }} my={10}>
         <Heading fontWeight={'400'} color="#333333" fontSize={'36px'}>
           Kanban Board
         </Heading>
@@ -198,7 +200,14 @@ const TaskList = () => {
           color={'#333333'}
           fontSize={'24px'}
         >
-          Buzz Sahil's Task
+          Developed by{' '}
+          <a
+            style={{ color: '#385898', fontWeight: '500' }}
+            target={'_blank'}
+            href="https://www.linkedin.com/in/sahil-asheikh/"
+          >
+            Sahil Sheikh
+          </a>
         </Text>
         <Divider my={3} />
         <Button
@@ -223,12 +232,8 @@ const TaskList = () => {
           Logout
         </Button>
 
-        <Grid templateColumns="repeat(4, 2fr)" mt={10} gap={10}>
-          <GridItem
-            w="100%"
-            borderRadius={'5px'}
-            // bg={'#EEEEEE'}
-          >
+        <SimpleGrid columns={[1, 3, 3, 3]} mt={10} gap={10}>
+          <GridItem w="100%" borderRadius={'5px'}>
             <Text size="20px" px={2} py={1} fontWeight={'medium'} bg={'white'}>
               {status[0]} {'(' + tasksNotStarted.length + ')'}
             </Text>
@@ -240,11 +245,7 @@ const TaskList = () => {
               />
             </Box>
           </GridItem>
-          <GridItem
-            w="100%"
-            borderRadius={'5px'}
-            //  bg={'#EEEEEE'}
-          >
+          <GridItem w="100%" borderRadius={'5px'}>
             <Text size="20px" px={2} py={1} fontWeight={'medium'} bg={'white'}>
               {status[1]} {'(' + tasksOnProgress.length + ')'}
             </Text>
@@ -256,11 +257,7 @@ const TaskList = () => {
               />
             </Box>
           </GridItem>
-          <GridItem
-            w="100%"
-            borderRadius={'5px'}
-            //  bg={'#EEEEEE'}
-          >
+          <GridItem w="100%" borderRadius={'5px'}>
             <Text size="20px" px={2} py={1} fontWeight={'medium'} bg={'white'}>
               {status[2]} {'(' + tasksCompleted.length + ')'}
             </Text>
@@ -272,7 +269,7 @@ const TaskList = () => {
               />
             </Box>
           </GridItem>
-        </Grid>
+        </SimpleGrid>
       </Box>
 
       <Modal
@@ -283,14 +280,17 @@ const TaskList = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          {/* <ModalHeader>Add your new Task</ModalHeader> */}
           <ModalCloseButton onClick={onCreateClose} />
           <ModalBody>
             <Heading fontSize={'26px'} fontWeight={'400'} mt={4}>
               Add Your Task
             </Heading>
             <Divider mt={3} />
-            <Grid templateColumns="repeat(2, 1fr)" mt={1} gap={10}>
+            <SimpleGrid
+              columns={{ base: 1, md: 2, lg: 2, xl: 2 }}
+              mt={1}
+              gap={10}
+            >
               <GridItem>
                 <FormControl isRequired>
                   <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
@@ -399,39 +399,6 @@ const TaskList = () => {
                     ))}
                   </Select>
                 </FormControl>
-                {/* <FormControl>
-                  <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
-                    Assigne To
-                  </FormLabel>
-                  <Select
-                    opacity={'80%'}
-                    fontSize={'12px'}
-                    size={'sm'}
-                    borderRadius={'5px'}
-                    value={assignee}
-                    onChange={e => setAssignee(e.target.value)}
-                  >
-                    <option
-                      fontSize={'12px'}
-                      color={'black'}
-                      selected
-                      value={''}
-                    >
-                      Select the Assignee
-                    </option>
-                    {assignees.map(assigneeItem => (
-                      <option
-                        color={'black'}
-                        fontSize={'12px'}
-                        bg={'white'}
-                        key={assigneeItem}
-                        value={assigneeItem}
-                      >
-                        {assigneeItem}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl> */}
                 <FormControl isRequired>
                   <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
                     Deadline
@@ -454,7 +421,7 @@ const TaskList = () => {
                   </FormLabel>
                 </FormControl>
               </GridItem>
-            </Grid>
+            </SimpleGrid>
           </ModalBody>
 
           <ModalFooter textAlign={'right'}>

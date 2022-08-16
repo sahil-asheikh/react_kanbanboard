@@ -28,10 +28,11 @@ const StatusCard = ({ taskList, getAllTasks, taskStat }) => {
     console.log(currentTaskId + '::' + changeTo, 'success');
     onLoadingOpen();
     try {
-      let taskUpdate = await fetch(`https://kanbanapibegawo.herokuapp.com/changeStatus?taskId=${currentTaskId}&status=${changeTo}`,
-      // let taskUpdate = await fetch(`http://localhost:9000/changeStatus?taskId=${currentTaskId}&status=${changeTo}`,
+      let taskUpdate = await fetch(
+        `https://kanbanapibegawo.herokuapp.com/changeStatus?taskId=${currentTaskId}&status=${changeTo}`,
+        // let taskUpdate = await fetch(`http://localhost:9000/changeStatus?taskId=${currentTaskId}&status=${changeTo}`,
         {
-          method: 'PUT'
+          method: 'PUT',
         }
       );
       taskUpdate = await taskUpdate.json();
@@ -80,7 +81,7 @@ const StatusCard = ({ taskList, getAllTasks, taskStat }) => {
             background="#EEEEEE"
             px={3}
             borderRadius={3}
-            minH={'100vh'}
+            minH={{ base: '', md: '100vh', lg: '100vh', xl: '100vh' }}
             py={1}
           >
             {taskList.length <= 0 ? (

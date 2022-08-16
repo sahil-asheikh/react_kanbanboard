@@ -24,6 +24,7 @@ import {
   IconButton,
   Badge,
   Spinner,
+  SimpleGrid,
 } from '@chakra-ui/react';
 import {
   ChevronDownIcon,
@@ -77,8 +78,9 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
     try {
       onLoadingOpen();
       onDeleteClose();
-      let taskSoftDeleted = await fetch(`https://kanbanapibegawo.herokuapp.com/softDelete/${taskId}/`,
-      // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
+      let taskSoftDeleted = await fetch(
+        `https://kanbanapibegawo.herokuapp.com/softDelete/${taskId}/`,
+        // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
         {
           method: 'DELETE',
           headers: {
@@ -139,16 +141,18 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
       alertToast('Input fields are empty!', 'warning');
     } else {
       try {
-        let taskUpdate = await fetch(`https://kanbanapibegawo.herokuapp.com/tasks`,
-        // let taskUpdate = await fetch(`http://localhost:9000/tasks`,
-        {
-          method: 'PUT',
-          headers: {
-            // Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(taskData),
-        });
+        let taskUpdate = await fetch(
+          `https://kanbanapibegawo.herokuapp.com/tasks`,
+          // let taskUpdate = await fetch(`http://localhost:9000/tasks`,
+          {
+            method: 'PUT',
+            headers: {
+              // Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(taskData),
+          }
+        );
         taskUpdate = await taskUpdate.json();
         console.log(taskData);
         alertToast('Task Updated Successfully', 'success');
@@ -199,9 +203,7 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
   return (
     <div>
       <Center my={3}>
-        {/* {storeData} */}
         <Box
-          maxW={'330px'}
           w={'full'}
           boxShadow={'2xl'}
           borderRadius={'3px'}
@@ -315,7 +317,11 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
               Update Your Task
             </Heading>
             <Divider mt={3} />
-            <Grid templateColumns="repeat(2, 1fr)" mt={1} gap={10}>
+            <SimpleGrid
+              columns={{ base: 1, md: 2, lg: 2, xl: 2 }}
+              mt={1}
+              gap={10}
+            >
               <GridItem>
                 <FormControl isRequired>
                   <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
@@ -412,31 +418,6 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
                     ))}
                   </Select>
                 </FormControl>
-                {/* <FormControl>
-                  <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
-                    Assigne To
-                  </FormLabel>
-                  <Select
-                    opacity={'80%'}
-                    fontSize={'12px'}
-                    size={'sm'}
-                    borderRadius={'5px'}
-                    value={assignee}
-                    onChange={e => setAssignee(e.target.value)}
-                  >
-                    {assignees.map(assigneeItem => (
-                      <option
-                        color={'black'}
-                        fontSize={'12px'}
-                        bg={'white'}
-                        key={assigneeItem}
-                        value={assigneeItem}
-                      >
-                        {assigneeItem}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl> */}
                 <FormControl isRequired>
                   <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
                     Deadline
@@ -459,7 +440,7 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
                   </FormLabel>
                 </FormControl>
               </GridItem>
-            </Grid>
+            </SimpleGrid>
           </ModalBody>
 
           <ModalFooter textAlign={'right'}>
