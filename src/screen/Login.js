@@ -37,7 +37,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassowrd] = useState('');
-  const [userId, setUserId] = useState('');
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -109,7 +108,11 @@ const Login = () => {
       alertPasswordLength();
     } else {
       try {
-        let taskById = await fetch(`https://kanbanapibegawo.herokuapp.com/login?username=${username.toString().trim()}&password=${password.toString().trim()}`);
+        let taskById = await fetch(
+          `https://kanbanapibegawo.herokuapp.com/login?username=${username
+            .toString()
+            .trim()}&password=${password.toString().trim()}`
+        );
         // let taskById = await fetch(`http://localhost:9000/login?username=${username.toString().trim()}&password=${password.toString().trim()}`);
         taskById = await taskById.json();
 
@@ -142,7 +145,7 @@ const Login = () => {
     } else {
       navigate('/');
     }
-  }, []);
+  }, [navigate]);
 
   const handleShowClick = () => setShowPassword(!showPassword);
 
