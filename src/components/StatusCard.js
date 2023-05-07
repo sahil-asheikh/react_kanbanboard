@@ -29,7 +29,7 @@ const StatusCard = ({ taskList, getAllTasks, taskStat }) => {
     onLoadingOpen();
     try {
       let taskUpdate = await fetch(
-        `https://kanbanapibegawo.herokuapp.com/changeStatus?taskId=${currentTaskId}&status=${changeTo}`,
+        `https://kanbanboard-apis.up.railway.app/changeStatus?taskId=${currentTaskId}&status=${changeTo}`,
         // let taskUpdate = await fetch(`http://localhost:9000/changeStatus?taskId=${currentTaskId}&status=${changeTo}`,
         {
           method: 'PUT',

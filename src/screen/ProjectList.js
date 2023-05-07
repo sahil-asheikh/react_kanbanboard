@@ -57,7 +57,7 @@ const ProjectList = () => {
     onLoadingOpen();
     // setAllProjects([]);
     try {
-      // let allTask = await fetch(`https://kanbanapibegawo.herokuapp.com/projectsByUserId/${localStorage.getItem('userId')}`);
+      // let allTask = await fetch(`https://kanbanboard-apis.up.railway.app/projectsByUserId/${localStorage.getItem('userId')}`);
       // let allProjects = await fetch(`http://localhost:9000/projectsByUserId/${localStorage.getItem('userId')}`);
       // allProjects = await allProjects.json();
       // setAllProjects(allProjects);
@@ -72,7 +72,7 @@ const ProjectList = () => {
     onLoadingOpen();
     setCurrentUser([]);
     try {
-      // let allTask = await fetch(`https://kanbanapibegawo.herokuapp.com/users/${localStorage.getItem('userId')}`);
+      // let allTask = await fetch(`https://kanbanboard-apis.up.railway.app/users/${localStorage.getItem('userId')}`);
       let currentUserData = await fetch(`http://localhost:9000/users/${localStorage.getItem('userId')}`);
       currentUserData = await currentUserData.json();
       setCurrentUser(currentUserData);

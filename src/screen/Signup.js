@@ -109,7 +109,7 @@ const Signup = () => {
       alertInvalidUsername();
     } else {
       try {
-        let userAdded = await fetch('https://kanbanapibegawo.herokuapp.com/register',
+        let userAdded = await fetch('https://kanbanboard-apis.up.railway.app/register',
           // let userAdded = await fetch('http://localhost:9000/register',
           {
             method: 'POST',

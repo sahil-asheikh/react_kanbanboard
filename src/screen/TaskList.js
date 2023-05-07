@@ -75,7 +75,7 @@ const TaskList = () => {
     setTaskCompleted([]);
     try {
       let allTask = await fetch(
-        `https://kanbanapibegawo.herokuapp.com/tasksByUserId/${localStorage.getItem(
+        `https://kanbanboard-apis.up.railway.app/tasksByUserId/${localStorage.getItem(
           'userId'
         )}`
       );
@@ -143,7 +143,7 @@ const TaskList = () => {
     } else {
       try {
         let taskAdded = await fetch(
-          'https://kanbanapibegawo.herokuapp.com/tasks',
+          'https://kanbanboard-apis.up.railway.app/tasks',
           // let taskAdded = await fetch('http://localhost:9000/tasks',
           {
             method: 'POST',

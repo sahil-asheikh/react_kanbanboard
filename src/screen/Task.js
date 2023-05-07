@@ -70,7 +70,7 @@ const Task = () => {
     onDeleteClose();
     try {
       let taskSoftDeleted = await fetch(
-        `https://kanbanapibegawo.herokuapp.com/softDelete/${taskId}/`,
+        `https://kanbanboard-apis.up.railway.app/softDelete/${taskId}/`,
         // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
         {
           method: 'DELETE',
@@ -132,7 +132,7 @@ const Task = () => {
     } else {
       try {
         let taskUpdate = await fetch(
-          `https://kanbanapibegawo.herokuapp.com/tasks`,
+          `https://kanbanboard-apis.up.railway.app/tasks`,
           {
             // let taskUpdate = await fetch(`http://localhost:9000/tasks`, {
             method: 'PUT',
@@ -167,7 +167,7 @@ const Task = () => {
   const fetchTask = async () => {
     onLoadingOpen();
     let taskById = await fetch(
-      `https://kanbanapibegawo.herokuapp.com/tasks/${taskId}`
+      `https://kanbanboard-apis.up.railway.app/tasks/${taskId}`
     );
     // let taskById = await fetch(`http://localhost:9000/tasks/${taskId}`);
     taskById = await taskById.json();
