@@ -15,16 +15,13 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalFooter,
-  ModalHeader,
   ModalOverlay,
-  Select,
   Spinner,
   Text,
   Textarea,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import StatusCard from '../components/StatusCard';
 import { useNavigate } from 'react-router-dom';
 import ProjectCard from '../components/ProjectCard';
 
@@ -53,17 +50,17 @@ const ProjectList = () => {
     getAllProjects();
     onOpen();
   };
-  const [allProjects, setAllProjects] = useState();
+  // const [allProjects, setAllProjects] = useState([]);
   const [currentUser, setCurrentUser] = useState([]);
 
   const getAllProjects = async () => {
     onLoadingOpen();
-    setAllProjects([]);
+    // setAllProjects([]);
     try {
       // let allTask = await fetch(`https://kanbanapibegawo.herokuapp.com/projectsByUserId/${localStorage.getItem('userId')}`);
-      let allProjects = await fetch(`http://localhost:9000/projectsByUserId/${localStorage.getItem('userId')}`);
-      allProjects = await allProjects.json();
-      setAllProjects(allProjects);
+      // let allProjects = await fetch(`http://localhost:9000/projectsByUserId/${localStorage.getItem('userId')}`);
+      // allProjects = await allProjects.json();
+      // setAllProjects(allProjects);
     } catch (error) {
       console.log(`${error}`);
       alertToast('Operation Failed!', 'error');
@@ -103,6 +100,7 @@ const ProjectList = () => {
     useEffect(()=>{
         getAllProjects();
         getUser();
+        // eslint-disable-next-line
     },[])
 
   return (

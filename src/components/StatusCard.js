@@ -9,7 +9,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import TaskCard from './TaskCard';
 
 const StatusCard = ({ taskList, getAllTasks, taskStat }) => {
@@ -36,6 +36,7 @@ const StatusCard = ({ taskList, getAllTasks, taskStat }) => {
         }
       );
       taskUpdate = await taskUpdate.json();
+      console.log(taskUpdate);
       alertToast('Moved to ' + changeTo, 'success');
       onLoadingClose();
       getAllTasks();

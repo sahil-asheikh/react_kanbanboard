@@ -3,7 +3,6 @@ import {
   Divider,
   FormControl,
   FormLabel,
-  Grid,
   GridItem,
   Heading,
   Input,
@@ -19,7 +18,6 @@ import {
   useToast,
   Box,
   Text,
-  Link,
   Spinner,
   Center,
   SimpleGrid,
@@ -56,7 +54,7 @@ const Task = () => {
   const [priority, setPriority] = useState('');
   const [priorities] = React.useState(['P1', 'P2', 'P3', 'P4']);
   const [assignee, setAssignee] = useState('');
-  const [assignees] = React.useState(['Sahil', 'Kshitij', 'Vaishali']);
+  // const [assignees] = React.useState(['Sahil', 'Kshitij', 'Vaishali']);
   const toast = useToast();
 
   const alertToast = (message, alertStatus) =>
@@ -84,6 +82,7 @@ const Task = () => {
         }
       );
       taskSoftDeleted = await taskSoftDeleted.json();
+      console.log(taskSoftDeleted);
       alertToast('Task Deleted Successfully', 'error');
       onLoadingClose();
       navigate('/');
@@ -145,6 +144,7 @@ const Task = () => {
           }
         );
         taskUpdate = await taskUpdate.json();
+        console.log(taskUpdate);
         alertToast('Task Updated Successfully', 'success');
         setTitle(title);
         setSummary(summary);
@@ -193,6 +193,7 @@ const Task = () => {
     } else {
       fetchTask();
     }
+    // eslint-disable-next-line
   }, []);
 
   return (

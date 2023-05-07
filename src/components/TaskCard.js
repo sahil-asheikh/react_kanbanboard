@@ -62,7 +62,6 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
   const [priority, setPriority] = useState('');
   const [priorities] = React.useState(['P1', 'P2', 'P3', 'P4']);
   const [assignee, setAssignee] = useState('');
-  const [assignees] = React.useState(['Sahil', 'Kshitij', 'Vaishali']);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -78,19 +77,19 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
     try {
       onLoadingOpen();
       onDeleteClose();
-      let taskSoftDeleted = await fetch(
-        `https://kanbanapibegawo.herokuapp.com/softDelete/${taskId}/`,
-        // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
-        {
-          method: 'DELETE',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          // body: JSON.stringify(taskData),
-        }
-      );
-      taskSoftDeleted = await taskSoftDeleted.json();
+      // let taskSoftDeleted = await fetch(
+      //   `https://kanbanapibegawo.herokuapp.com/softDelete/${taskId}/`,
+      //   // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
+      //   {
+      //     method: 'DELETE',
+      //     headers: {
+      //       Accept: 'application/json',
+      //       'Content-Type': 'application/json',
+      //     },
+      //     // body: JSON.stringify(taskData),
+      //   }
+      // );
+      // taskSoftDeleted = await taskSoftDeleted.json();
       alertToast('Task Deleted Successfully', 'error');
       onLoadingClose();
       // onDeleteClose();
@@ -154,6 +153,7 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
           }
         );
         taskUpdate = await taskUpdate.json();
+        console.log(taskUpdate);
         console.log(taskData);
         alertToast('Task Updated Successfully', 'success');
         setTitle(title);
@@ -198,6 +198,7 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
     } else {
       storeData();
     }
+    // eslint-disable-next-line
   }, []);
 
   return (

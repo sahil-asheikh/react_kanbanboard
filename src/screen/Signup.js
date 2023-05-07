@@ -12,7 +12,6 @@ import {
   Link,
   Avatar,
   FormControl,
-  FormHelperText,
   InputRightElement,
   Center,
   useToast,
@@ -148,6 +147,7 @@ const Signup = () => {
     } else {
       navigate('/');
     }
+    // eslint-disable-next-line
   }, []);
 
   const handleShowClick = () => setShowPassword(!showPassword);

@@ -155,6 +155,7 @@ const TaskList = () => {
           }
         );
         taskAdded = await taskAdded.json();
+        console.log(taskAdded);
         alertToast('Task Added Successfully', 'success');
         setTitle('');
         setSummary('');
@@ -186,6 +187,7 @@ const TaskList = () => {
     } else {
       getAllTasks();
     }
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -204,6 +206,7 @@ const TaskList = () => {
           <a
             style={{ color: '#385898', fontWeight: '500' }}
             target={'_blank'}
+            rel="noreferrer"
             href="https://www.linkedin.com/in/sahil-asheikh/"
           >
             Sahil Sheikh
