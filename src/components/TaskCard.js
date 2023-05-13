@@ -77,19 +77,20 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
     try {
       onLoadingOpen();
       onDeleteClose();
-      // let taskSoftDeleted = await fetch(
-      //   `https://kanbanboard-apis.up.railway.app/softDelete/${taskId}/`,
-      //   // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
-      //   {
-      //     method: 'DELETE',
-      //     headers: {
-      //       Accept: 'application/json',
-      //       'Content-Type': 'application/json',
-      //     },
-      //     // body: JSON.stringify(taskData),
-      //   }
-      // );
-      // taskSoftDeleted = await taskSoftDeleted.json();
+      let taskSoftDeleted = await fetch(
+        `https://kanbanboard-apis.up.railway.app/softDelete/${taskId}/`,
+        // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
+        {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          // body: JSON.stringify(taskData),
+        }
+      );
+      taskSoftDeleted = await taskSoftDeleted.json();
+      console.log(taskSoftDeleted);
       alertToast('Task Deleted Successfully', 'error');
       onLoadingClose();
       // onDeleteClose();
