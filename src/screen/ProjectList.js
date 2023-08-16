@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import React, { useEffect, useState } from 'react';
 import {
   Box,
@@ -58,7 +59,7 @@ const ProjectList = () => {
     // setAllProjects([]);
     try {
       // let allTask = await fetch(`https://kanbanboard-apis.up.railway.app/projectsByUserId/${localStorage.getItem('userId')}`);
-      // let allProjects = await fetch(`http://localhost:9000/projectsByUserId/${localStorage.getItem('userId')}`);
+      // let allProjects = await fetch(`${API_BASE_URL}/projectsByUserId/${localStorage.getItem('userId')}`);
       // allProjects = await allProjects.json();
       // setAllProjects(allProjects);
     } catch (error) {
@@ -72,8 +73,7 @@ const ProjectList = () => {
     onLoadingOpen();
     setCurrentUser([]);
     try {
-      // let allTask = await fetch(`https://kanbanboard-apis.up.railway.app/users/${localStorage.getItem('userId')}`);
-      let currentUserData = await fetch(`http://localhost:9000/users/${localStorage.getItem('userId')}`);
+      let currentUserData = await fetch(`${API_BASE_URL}/users/${localStorage.getItem('userId')}`);
       currentUserData = await currentUserData.json();
       setCurrentUser(currentUserData);
     } catch (error) {

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import {
   Button,
   Divider,
@@ -78,8 +79,7 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
       onLoadingOpen();
       onDeleteClose();
       let taskSoftDeleted = await fetch(
-        `https://kanbanboard-apis.up.railway.app/softDelete/${taskId}/`,
-        // let taskSoftDeleted = await fetch(`http://localhost:9000/softDelete/${taskId}/`,
+        `${API_BASE_URL}/softDelete/${taskId}/`,
         {
           method: 'DELETE',
           headers: {
@@ -141,18 +141,13 @@ const TaskCard = ({ taskId, task, getAllTasks }) => {
       alertToast('Input fields are empty!', 'warning');
     } else {
       try {
-        let taskUpdate = await fetch(
-          `https://kanbanboard-apis.up.railway.app/tasks`,
-          // let taskUpdate = await fetch(`http://localhost:9000/tasks`,
-          {
-            method: 'PUT',
-            headers: {
-              // Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(taskData),
-          }
-        );
+        let taskUpdate = await fetch(`${API_BASE_URL}/tasks`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(taskData),
+        });
         taskUpdate = await taskUpdate.json();
         console.log(taskUpdate);
         console.log(taskData);

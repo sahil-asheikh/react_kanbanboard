@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import { useEffect, useState } from 'react';
 import {
   Flex,
@@ -109,17 +110,14 @@ const Signup = () => {
       alertInvalidUsername();
     } else {
       try {
-        let userAdded = await fetch('https://kanbanboard-apis.up.railway.app/register',
-          // let userAdded = await fetch('http://localhost:9000/register',
-          {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-          }
-        );
+        let userAdded = await fetch(`${API_BASE_URL}/register`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        });
         userAdded = await userAdded.json();
 
         if (userAdded.outputCode === 'User already Available') {

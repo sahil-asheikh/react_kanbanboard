@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import { useEffect, useState } from 'react';
 import {
   Flex,
@@ -109,11 +110,10 @@ const Login = () => {
     } else {
       try {
         let taskById = await fetch(
-          `https://kanbanboard-apis.up.railway.app/login?username=${username
+          `${API_BASE_URL}/login?username=${username
             .toString()
             .trim()}&password=${password.toString().trim()}`
         );
-        // let taskById = await fetch(`http://localhost:9000/login?username=${username.toString().trim()}&password=${password.toString().trim()}`);
         taskById = await taskById.json();
 
         if (taskById.outputCode === 'Loged in succesfully') {

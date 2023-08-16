@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import {
   Box,
   Center,
@@ -29,8 +30,7 @@ const StatusCard = ({ taskList, getAllTasks, taskStat }) => {
     onLoadingOpen();
     try {
       let taskUpdate = await fetch(
-        `https://kanbanboard-apis.up.railway.app/changeStatus?taskId=${currentTaskId}&status=${changeTo}`,
-        // let taskUpdate = await fetch(`http://localhost:9000/changeStatus?taskId=${currentTaskId}&status=${changeTo}`,
+        `${API_BASE_URL}/changeStatus?taskId=${currentTaskId}&status=${changeTo}`,
         {
           method: 'PUT',
         }

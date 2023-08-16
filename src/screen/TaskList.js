@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import React, { useEffect, useState } from 'react';
 import {
   Box,
@@ -75,11 +76,8 @@ const TaskList = () => {
     setTaskCompleted([]);
     try {
       let allTask = await fetch(
-        `https://kanbanboard-apis.up.railway.app/tasksByUserId/${localStorage.getItem(
-          'userId'
-        )}`
+        `${API_BASE_URL}/tasksByUserId/${localStorage.getItem('userId')}`
       );
-      // let allTask = await fetch(`http://localhost:9000/tasksByUserId/${localStorage.getItem('userId')}`);
       allTask = await allTask.json();
       if (!checkLoad) {
         for (let i in allTask) {
@@ -142,18 +140,14 @@ const TaskList = () => {
       alertToast('Please fill the empty inputs', 'warning');
     } else {
       try {
-        let taskAdded = await fetch(
-          'https://kanbanboard-apis.up.railway.app/tasks',
-          // let taskAdded = await fetch('http://localhost:9000/tasks',
-          {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(taskData),
-          }
-        );
+        let taskAdded = await fetch(`${API_BASE_URL}/tasks`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(taskData),
+        });
         taskAdded = await taskAdded.json();
         console.log(taskAdded);
         alertToast('Task Added Successfully', 'success');
