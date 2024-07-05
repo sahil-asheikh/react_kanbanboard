@@ -190,7 +190,7 @@ const TaskList = () => {
         <Heading fontWeight={'400'} color="#333333" fontSize={'36px'}>
           Kanban Board
         </Heading>
-        <Text
+        {/* <Text
           fontWeight={'400'}
           size={'4xl'}
           color={'#333333'}
@@ -201,11 +201,11 @@ const TaskList = () => {
             style={{ color: '#385898', fontWeight: '500' }}
             target={'_blank'}
             rel="noreferrer"
-            href="https://www.linkedin.com/in/sahil-asheikh/"
+            href="https://www.linkedin.com/in/sahilsheikh-dev/"
           >
             Sahil Sheikh
           </a>
-        </Text>
+        </Text> */}
         <Divider my={3} />
         <Button
           fontSize={'sm'}
