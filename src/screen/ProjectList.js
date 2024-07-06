@@ -73,7 +73,9 @@ const ProjectList = () => {
     onLoadingOpen();
     setCurrentUser([]);
     try {
-      let currentUserData = await fetch(`${API_BASE_URL}/users/${localStorage.getItem('userId')}`);
+      let currentUserData = await fetch(
+        `${API_BASE_URL}/users/${localStorage.getItem('userId')}`
+      );
       currentUserData = await currentUserData.json();
       setCurrentUser(currentUserData);
     } catch (error) {
@@ -81,13 +83,12 @@ const ProjectList = () => {
       alertToast('Operation Failed!', 'error');
     }
     onLoadingClose();
-  }
-  
+  };
+
   const logout = () => {
     localStorage.clear();
     navigate('/Login');
   };
-
 
   const alertToast = (message, alertStatus) =>
     toast({
@@ -97,11 +98,11 @@ const ProjectList = () => {
       isClosable: true,
     });
 
-    useEffect(()=>{
-        getAllProjects();
-        getUser();
-        // eslint-disable-next-line
-    },[])
+  useEffect(() => {
+    getAllProjects();
+    getUser();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div>
@@ -143,17 +144,16 @@ const ProjectList = () => {
 
         <Grid templateColumns="repeat(1, 2fr)" mt={10} gap={10}>
           <GridItem w="100%" borderRadius={'5px'} bg={'#FFFFFF'}>
-                <Text size="20px" px={2} py={1} fontWeight={'medium'} bg={'white'}>
-                    All Projects {'(10)'}
-                </Text>
-                <Divider mb={3} />
-                <Box p={2}>
-                    <ProjectCard />
-                    <ProjectCard />
-                </Box>
-            </GridItem>
+            <Text size="20px" px={2} py={1} fontWeight={'medium'} bg={'white'}>
+              All Projects {'(10)'}
+            </Text>
+            <Divider mb={3} />
+            <Box p={2}>
+              <ProjectCard />
+              <ProjectCard />
+            </Box>
+          </GridItem>
         </Grid>
-
       </Box>
 
       <Modal
@@ -172,42 +172,41 @@ const ProjectList = () => {
             <Divider mt={3} />
             {/* <Grid templateColumns="repeat(2, 1fr)" mt={1} gap={10}>
               <GridItem> */}
-                <FormControl isRequired>
-                  <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
-                    Title
-                  </FormLabel>
-                  <Input
-                    color={'black'}
-                    fontSize={'12px'}
-                    size={'sm'}
-                    borderRadius={'5px'}
-                    placeholder="Enter Title"
-                    value={title}
-                    onChange={e => setTitle(e.target.value)}
-                  />
-                </FormControl>
-                <FormControl isRequired>
-                  <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
-                    Summary
-                  </FormLabel>
-                  <Textarea
-                    color={'black'}
-                    rows={'10'}
-                    fontSize={'12px'}
-                    size={'sm'}
-                    borderRadius={'5px'}
-                    placeholder="Enter Description"
-                    value={summary}
-                    onChange={e => setSummary(e.target.value)}
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
-                    Note: Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </FormLabel>
-                </FormControl>
-              {/* </GridItem>
+            <FormControl isRequired>
+              <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
+                Title
+              </FormLabel>
+              <Input
+                color={'black'}
+                fontSize={'12px'}
+                size={'sm'}
+                borderRadius={'5px'}
+                placeholder="Enter Title"
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
+                Summary
+              </FormLabel>
+              <Textarea
+                color={'black'}
+                rows={'10'}
+                fontSize={'12px'}
+                size={'sm'}
+                borderRadius={'5px'}
+                placeholder="Enter Description"
+                value={summary}
+                onChange={e => setSummary(e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
+                Note: You can update the project later anytime without any issue.
+              </FormLabel>
+            </FormControl>
+            {/* </GridItem>
             </Grid> */}
           </ModalBody>
 

@@ -413,8 +413,7 @@ const TaskList = () => {
                 </FormControl>
                 <FormControl>
                   <FormLabel fontSize={'12px'} opacity={'80%'} mt={2}>
-                    Note: Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
+                    Note: You can update the task later anytime without any issue.
                   </FormLabel>
                 </FormControl>
               </GridItem>
